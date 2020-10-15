@@ -119,7 +119,9 @@ class Layer {
         // console.log('BEG loadTheSelectedImageAndRender');
         
         // Get the image blobUrl from memory, or from webserver
-        let selectedImageFilename = 'https://cdn.jsdelivr.net/gh/avnermosh/example10_flipTextureOfSprite/landscapeOrientation.jpg';
+        // let selectedImageFilename = 'https://cdn.jsdelivr.net/gh/avnermosh/example10_flipTextureOfSprite/landscapeOrientation.jpg';
+        // let selectedImageFilename = 'https://cdn.jsdelivr.net/gh/avnermosh/example12_ipad_landscape_image_not_centered_properly/foo1_3840_2160.jpg';
+        let selectedImageFilename = 'https://cdn.jsdelivr.net/gh/avnermosh/example12_ipad_landscape_image_not_centered_properly/exampleImg_3840_2160.jpg';
         let blobUrl = await this.getImageBlobUrl(selectedImageFilename);
 
         let imageOrientation = 6;
