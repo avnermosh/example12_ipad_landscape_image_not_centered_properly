@@ -37,15 +37,6 @@ ErrorHandlingUtil.bootstrap_alert_success = function (message) {
     $('<div id="bootstrap_alert_success" class="alert alert-success alert-dismissible my-alerts fade show" role="alert">' + message + '<button type="button" class="close" data-dismiss="alert"><span>×</span></button></div>').appendTo($('#alert_placeholder'));
 }
 
-ErrorHandlingUtil.bootstrap_alert_warning = function (message) {
-    $('<div id="bootstrap_alert_warning" class="alert alert-warning alert-dismissible my-alerts fade show" role="alert">' + message + '<button type="button" class="close" data-dismiss="alert"><span>×</span></button></div>').appendTo($('#alert_placeholder'));
-}
-
-ErrorHandlingUtil.bootstrap_alert_danger = function (message) {
-    $('<div id="bootstrap_alert_danger" class="alert alert-danger alert-dismissible my-alerts fade show" role="alert">' + message + '<button type="button" class="close" data-dismiss="alert"><span>×</span></button></div>').appendTo($('#alert_placeholder'));
-}
-
-// let timeOutInMillisec = 8000;
 let timeOutInMillisec = 2000;
 let extendedTimeOutInMillisec = 2000;
 let closeButton = true;

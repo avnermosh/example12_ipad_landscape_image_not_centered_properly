@@ -27,19 +27,10 @@ class TexturePanelPlugin {
         this.texControls;
         this.rotationVal = 0;
         this.flipY = true;
-        
-        // https://threejs.org/docs/#api/en/objects/Sprite
-        // textureSprite1 is the threejs planar Sprite object to show the selected images
         this.textureSprite1;
-
-        // Bounding box around the texture image
         this.bbox;
-        
         this.viewportExtendsOnX = false;
         this.currentViewportNormalized;
-
-        this.imageWidth = undefined;
-        this.imageHeight = undefined;
     };
 
     initTexturePanelPlugin() {
@@ -48,15 +39,6 @@ class TexturePanelPlugin {
         //////////////////////////////////////
         // Set camera related parameters
         //////////////////////////////////////
-
-        // https://discourse.threejs.org/t/does-change-in-camera-position-impact-the-left-top-right-and-bottom-parameters-of-orthographic-camera/5501
-        // left,right,top,bottom are in world units, i.e. for OrthographicCamera: leftBorderX = camera.position.x + (camera.left / camera.zoom);
-        //
-        // left,right,top,bottom (-50, 50, 50, -50) goes together with textureSprite.scale (100, 100, 1)
-        // because the vertices of textureSprite.geometry.attributes.position.data.array which is of type THREE_Sprite are normalized (-0.5 - 0.5)
-        // then the combination of left,right,top,bottom (-50, 50, 50, -50), and textureSprite.scale (100, 100, 1) fills in the entire window
-        // for combination of left,right,top,bottom (-50, 50, 50, -50), and textureSprite.scale (50, 100, 1) the image covers 1/2 of the window on the x axis
-        // for combination of left,right,top,bottom (-200, 200, 200, -200), and textureSprite.scale (100, 100, 1) the image covers 1/4 of the window on the x axis, and on the y axis
 
         let left = -100;
         let right = 100;
@@ -67,7 +49,6 @@ class TexturePanelPlugin {
 
         this.texCamera = new THREE_OrthographicCamera(left, right, top, bottom, near, far);
         this.texCamera.position.set( 0, 0, 80 );
-        
         this.texScene = new THREE_Scene();
 
         //////////////////////////////////////
@@ -82,15 +63,10 @@ class TexturePanelPlugin {
         this.texRenderer.setPixelRatio(window.devicePixelRatio);
         this.texRenderer.setClearColor(0XDBDBDB, 1); //Webgl canvas background color
         
-        let texRendererJqueryObject = $('#' + this.texRenderer.domElement.id);
-        texRendererJqueryObject.addClass("showFullSize");
-        
-
         ////////////////////////////////////////////////////
         // INIT CONTROLS
         ////////////////////////////////////////////////////
 
-        // this.setTexControls();
         this.initializeOrbitControlsTex();
 
         ////////////////////////////////////////////////////
@@ -121,9 +97,6 @@ class TexturePanelPlugin {
 
     };
 
-    _init() {
-        this.hideWidgets();
-    };
 
     getTexRenderer() {
         return this.texRenderer;
@@ -136,26 +109,6 @@ class TexturePanelPlugin {
     getTexCamera() {
         return this.texCamera;
     };
-
-    // set_camera_canvas_renderer_and_viewport2 - does for a specific texture:
-    // 
-    //  - sets the texCamera
-    //    - sets the texCamera position
-    //       - if camera of the specific texture does NOT pre-exists, sets the camera Frustum And Zoom
-    //       - if camera of the specific texture does pre-exists, sets the texCamera position to the previous camera position
-    //
-    //  - sets texControls
-    //    - sets the texControls.camera, texControls.target, texControls.minZoom
-    //       - if the specific texture already has a camera, sets variables of the texControls object from the new camera
-    //       - if the specific texture already does NOT have a camera, sets variables of the texControls object from the existing settings for the texture
-    //
-    //  - sets textureSprite1
-    //    - adds textureSprite1 texScene
-    //
-    //  - updateCameraAndCanvasForTheSelectedImage
-    //    -- calls OrbitControls3Dpane::setCameraAndCanvas - does xxx
-    // 
-    //  - sets currentViewportNormalized
 
     set_camera_canvas_renderer_and_viewport2(materialTexture, imageOrientation) {
         console.log('BEG set_camera_canvas_renderer_and_viewport2'); 
@@ -216,7 +169,6 @@ class TexturePanelPlugin {
         }
         else
         {
-            // RemoveME ???
             // portrait
             let minX = this.bbox.min.x;
             this.bbox.min.x = this.bbox.min.y;
@@ -227,14 +179,10 @@ class TexturePanelPlugin {
             this.bbox.max.y = maxX;
         }
 
-        // console.log('this.bbox.min', this.bbox.min);
-        // console.log('this.bbox.max', this.bbox.max);
-        
         //Add the mesh to the scene
         this.texScene.add(this.textureSprite1);
         
         this.updateCameraAndCanvasForTheSelectedImage(imageOrientation);
-
     };
     
     getBoundingBox() {
@@ -245,37 +193,33 @@ class TexturePanelPlugin {
         return this.viewportExtendsOnX;
     };
 
-    getTexControls() {
-        return this.texControls;
-    };
-    
-    setTexControls() {
-        // console.log('BEG setTexControls');
+    // setTexControls() {
+    //     // console.log('BEG setTexControls');
 
-        // Need to be similar to what is in OrbitControlsTexPane.js constructor
-        let texCanvasWrapperElement = document.getElementById('texCanvasWrapper');
+    //     // Need to be similar to what is in OrbitControlsTexPane.js constructor
+    //     let texCanvasWrapperElement = document.getElementById('texCanvasWrapper');
 
-        this.texControls = new OrbitControlsTexPane(this.texCamera, texCanvasWrapperElement);
+    //     this.texControls = new OrbitControlsTexPane(this.texCamera, texCanvasWrapperElement);
         
-        //////////////////////////////////////
-        // Set default zoom related parameters
-        //////////////////////////////////////
+    //     //////////////////////////////////////
+    //     // Set default zoom related parameters
+    //     //////////////////////////////////////
 
-        this.texControls.zoomSpeed = 0.8;
-        this.texControls.minZoom = 1;
-        this.texControls.maxZoom = Infinity;
+    //     this.texControls.zoomSpeed = 0.8;
+    //     this.texControls.minZoom = 1;
+    //     this.texControls.maxZoom = Infinity;
 
-        //////////////////////////////////////
-        // Set pan related parameters
-        //////////////////////////////////////
+    //     //////////////////////////////////////
+    //     // Set pan related parameters
+    //     //////////////////////////////////////
 
-        this.texControls.screenSpacePanning = true;
+    //     this.texControls.screenSpacePanning = true;
 
-        this.texControls.panSpeed = 0.6;
+    //     this.texControls.panSpeed = 0.6;
             
-        this.texControls.addEventListener('change', TexturePanelPlugin.render2);
+    //     this.texControls.addEventListener('change', TexturePanelPlugin.render2);
 
-    };
+    // };
 
     initializeOrbitControlsTex() {
         // console.log('BEG initializeOrbitControlsTex'); 
@@ -287,9 +231,6 @@ class TexturePanelPlugin {
         // Set rotate related parameters
         //////////////////////////////////////
 
-        // No rotation.
-        this.texControls.enableRotate = false;
-
         // Set the rotation angle (with 0 angle change range) to 0
         // coordinate axis system is:
         // x-red - directed right (on the screen), z-blue directed down (on the screen), y-green directed towards the camera
@@ -300,51 +241,18 @@ class TexturePanelPlugin {
         this.texControls.minAzimuthAngle = 0; // radians
         this.texControls.maxAzimuthAngle = 0; // radians
 
-        //////////////////////////////////////
-        // Set zoom related parameters
-        //////////////////////////////////////
-
-        this.texControls.zoomSpeed = 1.2;
-        // this.texControls.minZoom = 1;
-        // this.texControls.maxZoom = Infinity;
-
-        //////////////////////////////////////
-        // Set pan related parameters
-        //////////////////////////////////////
-
-        this.texControls.panSpeed = 0.6;
-        // if true, pan in screen-space
-        this.texControls.screenSpacePanning = true;
-        // // pixels moved per arrow key push
-        // this.texControls.keyPanSpeed = 7.0;
-
-        this.texControls.keys = [65, 83, 68, 70, 71, 72];
-
-        // https://css-tricks.com/snippets/javascript/javascript-keycodes/
-        // shift        16
-        // ctrl         17
-        // alt  18
-
         // need to set this.texCamera.position after construction of this.texControls
         this.texCamera.position.copy( TexturePanelPlugin.initialCameraHeightPosition );
         this.texCamera.zoom = 0.42;
 
         this.texControls.target.copy(this.texCamera.position);
-        // initial this.texControls.target.Y is set to 0
         this.texControls.target.setY(0.0);
 
     };
 
     
-    // loadTextureImageToTexturePane - loads the texture to the texturePane
-    
     loadTextureImageToTexturePane(textureImageInfo) {
         console.log('BEG loadTextureImageToTexturePane');
-        
-        if(Util.isObjectInvalid(textureImageInfo))
-        {
-            throw new Error('textureImageInfo is invalid');
-        }
         
         let texCanvasWrapper = $('#texCanvasWrapper');
         texCanvasWrapper.append(this.texRenderer.domElement);
@@ -357,20 +265,7 @@ class TexturePanelPlugin {
             }
         }
         
-        this.showWidgets();
-
-        // materialTexture stores the color/texture for the "material" (https://threejs.org/docs/#api/en/materials/MeshBasicMaterial)
-        // The object type of materialTexture is: 'Texture' (https://threejs.org/docs/#api/en/textures/Texture)
         let materialTexture = textureImageInfo.data.material.map;
-        // materialTexture.needsUpdate = true;
-
-        //////////////////////////////////////////////////
-        // Set:
-        // texCamera
-        // textureSprite1
-        // bbox for the textureSprite1
-        //////////////////////////////////////////////////
-
         this.set_camera_canvas_renderer_and_viewport2(materialTexture, textureImageInfo.imageOrientation);
         
         TexturePanelPlugin.render2();
@@ -396,28 +291,12 @@ class TexturePanelPlugin {
         let texCanvasWrapper = $('#texCanvasWrapper');
         let texCanvasWrapperSize = {width: texCanvasWrapper.innerWidth(),
                                     height: texCanvasWrapper.innerHeight()};
-
         return texCanvasWrapperSize;
     };
-
-    // updateCameraAndCanvasForTheSelectedImage - updates the texCamera and the canvas for a specific texture:
-    // 
-    //  - sets the texCamera
-    //    - sets the texCamera position
-    //       - if camera of the specific texture does NOT pre-exists, to the center of the image, and height to TexturePanelPlugin::initialCameraHeightAboveGround, or
-    //       - if camera of the specific texture does pre-exists, to the previous camera position
-    //
-    //  - sets the texRenderer viewport
-    //    - calls calcCanvasParams (e.g. offsetLeft, offsetTop) to set the viewport
 
     updateCameraAndCanvasForTheSelectedImage(imageOrientation) {
         console.log('BEG updateCameraAndCanvasForTheSelectedImage');
 
-        /////////////////////////////////////////////////////////////////////////////////////
-        // Set this.texCamera to default position (where the selected image is centered and fills the entire canvas)
-        /////////////////////////////////////////////////////////////////////////////////////
-
-        // texCanvasWrapperSize - the size of the gui window
         let texCanvasWrapperSize = this.getTexCanvasWrapperSize();
         let guiWindowWidth = texCanvasWrapperSize.width;
         let guiWindowHeight = texCanvasWrapperSize.height;
@@ -429,23 +308,13 @@ class TexturePanelPlugin {
         // Set the camera frustum, zoom to cover the entire image
         //////////////////////////////////////////////////////////////////////
         
-        this.imageWidth = Util.getNestedObject(this.textureSprite1, ['material', 'map', 'image', 'width']);
-        if(Util.isNumberInvalid(this.imageWidth))
-        {
-            console.error('this.textureSprite1', this.textureSprite1); 
-            throw new Error('this.textureSprite1.material.map.image.width is invalid.');
-        }
-        
-        this.imageHeight = Util.getNestedObject(this.textureSprite1, ['material', 'map', 'image', 'height']);
-        if(Util.isNumberInvalid(this.imageHeight))
-        {
-            throw new Error('this.textureSprite1.material.map.image.height is invalid.');
-        }
+        let imageWidth = Util.getNestedObject(this.textureSprite1, ['material', 'map', 'image', 'width']);
+        let imageHeight = Util.getNestedObject(this.textureSprite1, ['material', 'map', 'image', 'height']);
 
         retVal = this.texControls.setCameraAndCanvas(guiWindowWidth,
                                                      guiWindowHeight,
-                                                     this.imageWidth,
-                                                     this.imageHeight,
+                                                     imageWidth,
+                                                     imageHeight,
                                                      imageOrientation);
 
 
@@ -455,11 +324,7 @@ class TexturePanelPlugin {
 
         this.textureSprite1.scale.set( retVal.scaleX, retVal.scaleY, 1 );
         this.viewportExtendsOnX = retVal.viewportExtendsOnX;
-
-        // tbd - should texCanvasWrapperSize be set only one time ???
         this.texRenderer.setSize(texCanvasWrapperSize.width, texCanvasWrapperSize.height);
-
-        // Set viewport
         this.texRenderer.setViewport( -retVal.canvasOffsetLeft,
                                       -retVal.canvasOffsetTop,
                                       retVal.canvasWidth,
@@ -476,16 +341,6 @@ class TexturePanelPlugin {
         this.texControls.setZoom(this.texControls.minZoom);
         
         this.texCamera.updateProjectionMatrix();
-    };
-
-    hideWidgets() {
-        $("#texCanvasWrapper").hide();
-        $("#texInfoContainer").hide();
-    };
-
-    showWidgets() {
-        $("#texCanvasWrapper").show();
-        $("#texInfoContainer").show();
     };
 
 };
@@ -524,10 +379,6 @@ function animate() {
         TexturePanelPlugin.render2();
     }
 };
-
-$(document).on("SceneLayerSelected", function (event, layer) {
-    console.log('BEG SceneLayerSelected');
-});
 
 
 export { TexturePanelPlugin };

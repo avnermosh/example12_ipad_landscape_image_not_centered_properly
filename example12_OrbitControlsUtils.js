@@ -224,7 +224,6 @@ OrbitControlsUtils.calcCanvasParams = function (guiWindowWidth,
 
     if(guiWindow_w_h_ratio > image_w_h_ratio)
     {
-        console.log('foo1'); 
         // canvasHeight is bigger than guiWindowHeight
         canvasWidth = guiWindowWidth;
         canvasHeight = canvasWidth / image_w_h_ratio;

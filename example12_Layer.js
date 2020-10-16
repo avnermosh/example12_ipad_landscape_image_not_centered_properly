@@ -1,26 +1,9 @@
 /* eslint-disable max-len */
-// //////////////////////////////////////////////////////////////
-//
-// The layer file is 
-//
-// //////////////////////////////////////////////////////////////
 
 /* global THREE*/
 /* global Note*/
 
-import {Object3D as THREE_Object3D,
-        MeshBasicMaterial as THREE_MeshBasicMaterial,
-        SphereGeometry as THREE_SphereGeometry,
-        Mesh as THREE_Mesh,
-        Vector3 as THREE_Vector3,
-        MeshPhongMaterial as THREE_MeshPhongMaterial, 
-        DoubleSide as THREE_DoubleSide,
-        Geometry as THREE_Geometry,
-        Face3 as THREE_Face3, 
-        Box3 as THREE_Box3,
-        Vector2 as THREE_Vector2,
-        Vector4 as THREE_Vector4,
-        TextureLoader as THREE_TextureLoader,
+import {TextureLoader as THREE_TextureLoader,
         RGBFormat as THREE_RGBFormat,
         ClampToEdgeWrapping as THREE_ClampToEdgeWrapping,
         LinearFilter as THREE_LinearFilter,
@@ -28,8 +11,6 @@ import {Object3D as THREE_Object3D,
         Sprite as THREE_Sprite        
        } from '../../include/three.js/three.js-r120/build/three.module.js';
 
-import {CSS2DObject, CSS2DRenderer} from "../../include/CSS2DRenderer.js";
-        
 import { Model } from "./example12_Model.js";
 import { TexturePanelPlugin } from "./example12_TexturePanelPlugin.js";
 import { Util } from "./example12_Util.js";
@@ -91,56 +72,34 @@ class Layer {
         return this.texturePanelPlugin;
     };
 
-    getImageBlobUrlFromWebServer = async function (url) {
-        console.log('BEG getImageBlobUrlFromWebServer'); 
-        // The url is without /api/v1_2
-        // so this causes a simple fetch (GET) via the browser 
-        // and does NOT work through the backend api (i.e. python flask)
-        
-        // e.g. https://localhost/avner/img/45/56/IMG_6626.jpg
-        let response = await fetch(url);
-        ErrorHandlingUtil.handleErrors(response);
-        
-        let blob = await response.blob()
-        let blobUrl = URL.createObjectURL(blob);
-        return blobUrl;
-    };
-    
     // Returns blobUrl for image specified with imageFilename.
     getImageBlobUrl = async function (imageFilename) {
         // tbd = point to jsdelivr
         // e.g. https://localhost/avner/img/45/56/image_0.jpg
-        // let url = Model.getUrlBase() + Model.getUrlImagePathBase() +
-        //     '/' + this.planInfo.siteId + '/' +
-        //     this.planInfo.id + '/' + imageFilename;
 
         // let url = 'https://cdn.jsdelivr.net/gh/avnermosh/example10_flipTextureOfSprite/landscapeOrientation.jpg';
         let url = imageFilename;
         console.log('url', url); 
         
-        let blobUrl = await this.getImageBlobUrlFromWebServer(url);
+        let response = await fetch(url);
+        ErrorHandlingUtil.handleErrors(response);
+        
+        let blob = await response.blob()
+        let blobUrl = URL.createObjectURL(blob);
+
         console.log('blobUrl', blobUrl); 
         return blobUrl;
     };
-
     
     loadTheSelectedImageAndRender = async function () {
         // console.log('BEG loadTheSelectedImageAndRender');
         
-        // Get the image blobUrl from memory, or from webserver
-        // let selectedImageFilename = 'https://cdn.jsdelivr.net/gh/avnermosh/example10_flipTextureOfSprite/landscapeOrientation.jpg';
-        // let selectedImageFilename = 'https://cdn.jsdelivr.net/gh/avnermosh/example12_ipad_landscape_image_not_centered_properly/foo1_3840_2160.jpg';
-        // let selectedImageFilename = 'https://cdn.jsdelivr.net/gh/avnermosh/example12_ipad_landscape_image_not_centered_properly/exampleImg_3840_2160_2.jpg';
-        // let selectedImageFilename = 'https://192.168.1.74/avner/img/7/7/exampleImg_3840_2160.jpg';
-
         // ok loads (see setup1 in notes)
         // let selectedImageFilename = 'http://localhost/avner/img/9/13/bar1_2048_1536.jpg';
         // let selectedImageFilename = 'http://localhost/avner/img/7/7/exampleImg_3840_2160.jpg';
         let selectedImageFilename = 'http://192.168.1.74/avner/img/7/7/exampleImg_3840_2160.jpg';
         
-        
         let blobUrl = await this.getImageBlobUrl(selectedImageFilename);
-
         let imageOrientation = 6;
         await this.loadTextureFromFile(blobUrl, imageOrientation);
 
@@ -165,7 +124,7 @@ class Layer {
             }
 
             async function onLoad_Texture( texture2 ) {
-                console.log('BEG onLoad_Texture');
+                console.log('BEG onLoad_Texture1');
                 // This anonymous function will be called when the texture2 has finished loading
                 
                 texture2.wrapS = THREE_ClampToEdgeWrapping;
@@ -178,16 +137,9 @@ class Layer {
                 // texture.generateMipmaps = false;
 
                 let selectedLayer = Model.getSelectedLayer();
-                if(Util.isObjectInvalid(selectedLayer))
-                {
-                    throw new Error('Selected layer is invalid');
-                }
-
                 let rotationParams = OrbitControlsUtils.getRotationParams(imageOrientation);
                 let rotationVal = rotationParams.rotationVal;
-                let flipY = rotationParams.flipY;
-
-                texture2.flipY = flipY;
+                texture2.flipY = rotationParams.flipY;
                 
                 // https://stackoverflow.com/questions/36668836/threejs-displaying-a-2d-image
                 var material2 = new THREE_SpriteMaterial( { map: texture2,
@@ -216,7 +168,6 @@ class Layer {
                 // the texture image finished openning from file. Load the texture image onto the pane
                 let texturePanelPlugin = selectedLayer.getTexturePanelPlugin();
                 texturePanelPlugin.loadTextureImageToTexturePane(textureImageInfo);
-                console.log('foo1');
                 
                 resolve(true);
             };

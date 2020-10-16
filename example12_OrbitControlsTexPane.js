@@ -1,9 +1,6 @@
 
 import {Vector3 as THREE_Vector3,
-        MOUSE as THREE_MOUSE,
         Quaternion as THREE_Quaternion,
-        Spherical as THREE_Spherical,
-        Vector2 as THREE_Vector2,
         EventDispatcher as THREE_EventDispatcher
        } from '../../include/three.js/three.js-r120/build/three.module.js';
 
@@ -32,36 +29,10 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
         // it gets updated to the new camera position (position.x, position.x, 0) after pan
         // so that the camera always look down (i.e. 90 degrees) at the target.
         this.target = new THREE_Vector3();
-
-        // How far you can dolly in and out ( PerspectiveCamera only )
-        this.minDistance = 0;
-        this.maxDistance = Infinity;
         
         // How far you can zoom in and out ( OrthographicCamera only )
         this.minZoom = 0;
         this.maxZoom = Infinity;
-        
-        // This option actually enables dollying in and out; left as "zoom" for backwards compatibility.
-        // zooming speed
-        this.zoomSpeed = 1.0;
-
-        // panning speed
-        this.panSpeed = 1.0;
-
-        // if true, pan in screen-space
-        this.screenSpacePanning = false;
-
-        // pixels moved per arrow key push
-        this.keyPanSpeed = 7.0;
-
-        // for reset
-        this.target0 = this.target.clone();
-        this.position0 = this.camera.position.clone();
-        this.zoom0 = this.camera.zoom;
-        
-        ///////////////////////////////////////////////
-        // BEG from the wrapper around update()
-        ///////////////////////////////////////////////
         
         this.offset = new THREE_Vector3();
 
@@ -71,44 +42,9 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
 
         this.lastPosition = new THREE_Vector3();
         this.lastQuaternion = new THREE_Quaternion();
-
         this.cameraHeightAboveGround = 80;
-
-        ///////////////////////////////////////////////
-        // END from the wrapper around update()
-        ///////////////////////////////////////////////
-
-        ///////////////////////////////////////////////
-        // from the wrapper around panLeft()
-        ///////////////////////////////////////////////
-
-        this.v1 = new THREE_Vector3();
-
-        ///////////////////////////////////////////////
-        // from the wrapper around panUp()
-        ///////////////////////////////////////////////
-
-        this.v2 = new THREE_Vector3();
-        
-
-        //
-        // internals
-        //
-
-        this.state = OrbitControlsTexPane.STATE.NONE;
-
         this.scale = 1;
-        this.panOffset = new THREE_Vector3(0, 0, 0);
         this.zoomChanged = false;
-
-        this.panStart = new THREE_Vector2();
-        this.panEnd = new THREE_Vector2();
-        this.panDelta = new THREE_Vector2();
-
-        this.dollyStart = new THREE_Vector2();
-        this.dollyEnd = new THREE_Vector2();
-        this.dollyDelta = new THREE_Vector2();
-
     };
 
     initOrbitControlsTexPane()
@@ -117,66 +53,19 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
         this.domElement.activate();
     };
 
-    setState(otherState)
-    {
-        this.state = otherState;
-    };
-    
-    getState() {
-        return this.state;        
-    };
-
-    saveState() {
-        // console.log('BEG saveState');
-        this.target0.copy( this.target );
-        this.position0.copy( this.camera.position );
-        this.zoom0 = this.camera.zoom;
-    };
-
-    reset(otherTarget, otherPosition, otherZoom) {
-        // console.log('BEG OrbitControlsTexPane::reset()');
-        this.target.copy( this.target0 );
-        // this.camera.position.copy( this.position0 );
-        this.camera.zoom = this.zoom0;
-
-        this.camera.updateProjectionMatrix();
-
-        this.update();
-        this.setState( OrbitControlsTexPane.STATE.NONE );
-    };
-
-    setFromCameraInfo(cameraInfo) {
-        // console.log('BEG setFromCameraInfo'); 
-        this.camera = cameraInfo.camera22;
-        this.target.set(this.camera.position.x, this.camera.position.y, 0);
-        this.minZoom = cameraInfo.minZoom;
-    };
-
     setZoom(zoomFactor) {
         // console.log('BEG setZoom');
-
-        // this.camera.zoom = Math.max( this.minZoom, Math.min( this.maxZoom, this.camera.zoom * dollyScale ) );
         this.camera.zoom = Math.max( this.minZoom, Math.min( this.maxZoom, zoomFactor ) );
         this.camera.updateProjectionMatrix();
         this.zoomChanged = true;
-
-        this.saveState();
-        // console.log('this.camera.zoom', this.camera.zoom); 
     };
 
     update() {
         // console.log('BEG OrbitControlsTexPane::update()');
         
-        // move target to panned location
-        this.target.add( this.panOffset );
-
         // Set the camera above the target.
         this.camera.position.set( this.target.x, this.target.y, this.cameraHeightAboveGround );
-        
         this.camera.lookAt( this.target );
-
-        this.panOffset.set( 0, 0, 0 );
-        
         this.scale = 1;
         
         // update condition is:
@@ -194,13 +83,6 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
             this.zoomChanged = false;
 
             let selectedLayer = Model.getSelectedLayer();
-            if(Util.isObjectInvalid(selectedLayer))
-            {
-                console.warn('Layer is invalid');
-                return false;
-            }
-
-            // scene3DtopDown -> texturePlugin
             let texturePlugin = selectedLayer.getTexturePanelPlugin()
             let bBox = texturePlugin.getBoundingBox();
             let viewportExtendsOnX = texturePlugin.doesViewportExtendOnX();
@@ -217,7 +99,6 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
     
     dispose() {
         this.deactivate();
-        // this.dispatchEvent( { type: 'dispose' } ); // should this be added here?
     };
     
     setCameraFrustumAndZoom(guiWindowWidth,
@@ -227,18 +108,10 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
                             imageOrientation) {
 
         // console.log('BEG setCameraFrustumAndZoom');
-        
-        //////////////////////////////////////////////////////////
-        // Set the camera frustum, zoom
-        //////////////////////////////////////////////////////////
-
-        // console.log('this.camera.left1', this.camera.left);
-
         this.camera.left = -imageWidth/2;
         this.camera.right = imageWidth/2;
         this.camera.top = imageHeight/2;
         this.camera.bottom = -imageHeight/2;
-
         this.setZoom(this.minZoom);
         this.camera.updateProjectionMatrix();
     };
@@ -260,7 +133,6 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
         {
             // canvasWidth is smaller than guiWindowWidth
             zoomFactor = guiWindowHeight / canvasHeight;
-
         }
         else
         {
@@ -332,68 +204,6 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
         return retVal;
     };
     
-    //
-    // internals
-    //
-
-    getZoomScale() {
-        return Math.pow( 0.95, this.zoomSpeed );
-    };
-
-    panLeft( distance, objectMatrix ) {
-        // console.log('BEG panLeft');
-        
-        this.v1.setFromMatrixColumn( objectMatrix, 0 ); // get X column of objectMatrix
-        this.v1.multiplyScalar( - distance );
-        this.panOffset.add( this.v1 );
-    };
-    
-    panUp( distance, objectMatrix ) {
-        // console.log('BEG panUp');
-
-        if ( this.screenSpacePanning === true ) {
-            this.v2.setFromMatrixColumn( objectMatrix, 1 );
-        } 
-        else {
-            this.v2.setFromMatrixColumn( objectMatrix, 0 );
-            this.v2.crossVectors( this.camera.up, this.v2 );
-        }
-
-        this.v2.multiplyScalar( distance );
-        this.panOffset.add( this.v2 );
-    };
-    
-    // deltaX and deltaY are in pixels; right and down are positive
-    pan( deltaX, deltaY ) {
-        // console.log('BEG pan');
-
-        var element = this.domElement === document ? this.domElement.body : this.domElement;
-
-        this.panLeft( deltaX * ( this.camera.right - this.camera.left ) / this.camera.zoom / element.clientWidth,
-                      this.camera.matrix );
-
-        this.panUp( deltaY * ( this.camera.top - this.camera.bottom ) / this.camera.zoom / element.clientHeight,
-                    this.camera.matrix );
-    };
-
-    dollyInOut( dollyScale, doDollyIn ) {
-        // console.log('BEG dollyInOut');
-        
-        // dollyIn
-        let zoom1 = this.camera.zoom / dollyScale;
-        if(!doDollyIn)
-        {
-            // dollyOut
-            zoom1 = this.camera.zoom * dollyScale;
-        }
-        this.camera.zoom = Math.max( this.minZoom, Math.min( this.maxZoom, zoom1 ) );
-        this.camera.updateProjectionMatrix();
-        this.zoomChanged = true;
-        // console.log('this.zoomChanged', this.zoomChanged); 
-
-        this.saveState();
-    };
-
 
     ///////////////////////////////////////////////////////////////////////////
     // limitPanning() insures that the image always covers the view window:
@@ -403,7 +213,7 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
     ///////////////////////////////////////////////////////////////////////////
 
     limitPanning(bbox, viewportExtendsOnX) {
-        // console.log('BEG limitPanning'); 
+        console.log('BEG limitPanning'); 
 
         let x1 = 0;
         let x3 = 0;
@@ -498,183 +308,8 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
 
     };
 
-    ///////////////////////////////////
-    // BEG Touch related functions
-    ///////////////////////////////////
-
-    handleTouchMove4( event ) {
-        // console.log('BEG handleTouchMove4');
-
-        // Prevent from applying the _default_, _generic_ browser scroll to the texture2D pane
-        // Instead, the texture2D pane is _panned_ with custom logic
-        event.preventDefault();
-
-        switch ( event.touches.length ) {
-
-            case 1:
-                // one-finger touch
-                this.setState( OrbitControlsTexPane.STATE.PAN );
-                
-                let point2d = new THREE_Vector2(event.touches[ 0 ].pageX,
-                                                event.touches[ 0 ].pageY);
-                this.handleMouseMove_orOneFingerTouchMove4(point2d);
-
-                break;
-
-            case 2: 
-                // two-finger-pinch(zoom,dolly) touch
-                this.setState( OrbitControlsTexPane.STATE.DOLLY );
-
-                if(event.targetTouches.length == 2)
-                {
-                    // Enable "two-finger-pinch(zoom,dolly) touch" only if both touches are in the same DOM element.
-                    let dx = Math.abs(event.touches[ 0 ].pageX - event.touches[ 1 ].pageX);
-                    let dy = Math.abs(event.touches[ 0 ].pageY - event.touches[ 1 ].pageY);
-                    let point2d = new THREE_Vector2(dx, dy);
-                    this.handleMouseMove_orTwoFingerTouchMove4( point2d );
-                }
-
-                break;
-
-            default:
-                this.setState( OrbitControlsTexPane.STATE.NONE );
-        }
-
-        // console.log('END handleTouchMove4	');
-    };
-
-    ///////////////////////////////////
-    // END Touch related functions
-    ///////////////////////////////////
-
-    ///////////////////////////////////
-    // BEG Mouse related functions
-    ///////////////////////////////////
-
-    handleMouseDown_orTouchDown4( point2d ) {
-        // console.log( 'BEG handleMouseDown_orTouchDown4' );
-
-        this.dollyStart.set( point2d.x, point2d.y );
-        this.panStart.set( point2d.x, point2d.y );
-    };
-    
-    handleMouseMove_orOneFingerTouchMove4( point2d ) {
-        // console.log( 'BEG handleMouseMove_orOneFingerTouchMove4' );
-
-        this.panEnd.set( point2d.x, point2d.y );
-        this.panDelta.subVectors( this.panEnd, this.panStart ).multiplyScalar( this.panSpeed );
-        // pan the pane
-        this.pan( this.panDelta.x, this.panDelta.y );
-
-        // update panStart for the future
-        this.panStart.copy( this.panEnd );
-        this.update();
-    };
-
-    handleMouseMove_orTwoFingerTouchMove4( point2d ) {
-        // console.log( 'BEG handleMouseMove_orTwoFingerTouchMove4' );
-        
-        this.dollyEnd.set( point2d.x, point2d.y );
-        this.dollyDelta.subVectors( this.dollyEnd, this.dollyStart );
-        if ( this.dollyDelta.y > 0 ) {
-            this.dollyInOut( this.getZoomScale(), true );
-        } 
-        else if ( this.dollyDelta.y < 0 ) {
-            this.dollyInOut( this.getZoomScale(), false );
-        }
-
-        this.dollyStart.copy( this.dollyEnd );
-        this.update();
-    };
-
-    async handleMouseDown4( event ) {
-        // console.log('BEG handleMouseDown0'); 
-
-        event.preventDefault();
-        let point2d = new THREE_Vector2(event.clientX, event.clientY);
-        switch ( event.button ) {
-            case OrbitControlsTexPane.mouseButtons.LEFT:
-                this.handleMouseDown_orTouchDown4( point2d );
-                break;
-        }
-        
-        // console.log('END handleMouseDown0'); 
-    };
-
-    handleMouseWheel4( event ) {
-        // console.log('BEG handleMouseWheel4');
-
-        if ( this.state !== OrbitControlsTexPane.STATE.NONE )
-        {
-            return;
-        }
-
-        event.stopPropagation();
-
-        if ( event.deltaY < 0 ) {
-            this.dollyInOut( this.getZoomScale(), true );
-        }
-        else if ( event.deltaY > 0 ) {
-            this.dollyInOut( this.getZoomScale(), false );
-        }
-        this.update();
-    };
-
-    handleKeyDown4( event ) {
-        // console.log('BEG handleKeyDown4'); 
-
-        switch ( event.keyCode ) {
-
-            case this.keys.UP:
-                this.pan( 0, this.keyPanSpeed );
-                this.update();
-                break;
-
-            case this.keys.BOTTOM:
-                this.pan( 0, - this.keyPanSpeed );
-                this.update();
-                break;
-
-            case this.keys.LEFT:
-                this.pan( this.keyPanSpeed, 0 );
-                this.update();
-                break;
-
-            case this.keys.RIGHT:
-                this.pan( - this.keyPanSpeed, 0 );
-                this.update();
-                break;
-        }
-    };
-
-
-    ///////////////////////////////////
-    // END mouse related functions
-    ///////////////////////////////////
-
-    handleContextMenu4( event ) {
-        // TBD enables taking a snapshot of the texture2D pane. Possible future feature
-        // for now disabling it so that it does not pop up the menu when right clicking in Edit mode
-        event.preventDefault();
-    };
 };
 
-///////////////////////////////////
-// BEG Static class variables
-///////////////////////////////////
-
-OrbitControlsTexPane.STATE = { NONE: -1, NA1: 0, DOLLY: 1, PAN: 2 };
-
 OrbitControlsTexPane.EPS = 0.0001;
-
-// The four arrow keys
-OrbitControlsTexPane.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
-
-// Mouse buttons
-OrbitControlsTexPane.mouseButtons = { LEFT: THREE_MOUSE.LEFT, MIDDLE: THREE_MOUSE.MIDDLE, RIGHT: THREE_MOUSE.RIGHT };
-
-///////////////////////////////////
-// END Static class variables
-///////////////////////////////////
 
 export { OrbitControlsTexPane };
