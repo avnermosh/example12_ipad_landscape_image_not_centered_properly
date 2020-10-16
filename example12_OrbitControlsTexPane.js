@@ -20,7 +20,7 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
         super();
         // console.log('BEG construct OrbitControlsTexPane'); 
         this.domElement = ( Util.isObjectValid(domElement) ) ? domElement : document;
-            
+        
         if ( !camera.isOrthographicCamera ) {
             // sanity check
             throw new Error('camera is not orthographic');
@@ -288,8 +288,8 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
                                      imageOrientation);
         
         let retVal0 = OrbitControlsUtils.getScaleAndRatio(imageWidth,
-                                                              imageHeight,
-                                                              imageOrientation);
+                                                          imageHeight,
+                                                          imageOrientation);
 
         let scaleX = retVal0.scaleX;
         let scaleY = retVal0.scaleY;
@@ -297,11 +297,18 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
 
         let isTexturePane = true;
         let retVal1 = OrbitControlsUtils.calcCanvasParams(guiWindowWidth,
-                                                              guiWindowHeight,
-                                                              imageWidth,
-                                                              imageHeight,
-                                                              isTexturePane);
+                                                          guiWindowHeight,
+                                                          imageWidth,
+                                                          imageHeight,
+                                                          isTexturePane);
 
+        
+        console.log('guiWindowWidth', guiWindowWidth);
+        console.log('guiWindowHeight', guiWindowHeight);
+        console.log('imageWidth', imageWidth); 
+        console.log('imageHeight', imageHeight); 
+        console.log('retVal1', retVal1);
+        
         this.setMinZoom2(guiWindowWidth,
                          guiWindowHeight,
                          imageWidth,

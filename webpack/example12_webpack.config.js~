@@ -1,0 +1,30 @@
+
+var path = require('path');
+
+module.exports = {
+    mode: 'development',
+    context: path.resolve('js/mlj/'),
+    entry: ['./main.js'],
+    output: {
+        // the output file bundle.js is placed in the path "build/mlj/"
+        path: path.resolve('build/mlj'),
+        publicPath: 'build',
+        filename: 'bundle.js'
+    },
+    devServer: {
+        contentBase: 'public'
+    },
+    watch: true,
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                options: {
+                    presets: ["@babel/preset-env"]
+                }                
+            }
+        ]    
+    }
+};
+

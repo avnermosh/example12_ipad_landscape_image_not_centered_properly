@@ -97,25 +97,27 @@ class TexturePanelPlugin {
         // EVENT HANDLERS
         ////////////////////////////////////////////////////
 
-        // $(window).resize(function () {
-        //     console.log('BEG TexturePanelPlugin window resize2');
-        //     let selectedLayer = Model.getSelectedLayer();
-        //     let texturePanelPlugin = selectedLayer.getTexturePanelPlugin();
+        $(window).resize(function () {
+            console.log('BEG TexturePanelPlugin window resize2');
+            let selectedLayer = Model.getSelectedLayer();
+            let texturePanelPlugin = selectedLayer.getTexturePanelPlugin();
 
-        //     let textureImageInfo = selectedLayer.getCurrentTextureImageInfo();
-        //     let materialTexture = Util.getNestedObject(textureImageInfo, ['data', 'material', 'map']);
+            let textureImageInfo = selectedLayer.getCurrentTextureImageInfo();
+            console.log('textureImageInfo', textureImageInfo); 
+            let materialTexture = Util.getNestedObject(textureImageInfo, ['data', 'material', 'map']);
             
-        //     if(Util.isObjectValid(materialTexture))
-        //     {
-        //         // let vh = window.innerHeight * 0.01;
-        //         let vh = 985 * 0.01;
-        //         document.documentElement.style.setProperty('--vh', `${vh}px`);
-        //         let val1 = document.documentElement.style.getPropertyValue('--vh');
-        //         console.log('val1', val1); 
-                
-        //         texturePanelPlugin.set_camera_canvas_renderer_and_viewport2(materialTexture, imageOrientation);
-        //     }
-        // });
+            if(Util.isObjectValid(materialTexture))
+            {
+                // let vh = window.innerHeight * 0.01;
+                let vh = 985 * 0.01;
+                document.documentElement.style.setProperty('--vh', `${vh}px`);
+                let val1 = document.documentElement.style.getPropertyValue('--vh');
+                console.log('val1', val1); 
+
+                let imageOrientation = textureImageInfo.imageOrientation;
+                texturePanelPlugin.set_camera_canvas_renderer_and_viewport2(materialTexture, imageOrientation);
+            }
+        });
 
     };
 

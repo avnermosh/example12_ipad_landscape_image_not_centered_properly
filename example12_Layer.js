@@ -42,11 +42,20 @@ class Layer {
         this.name = name;
 
         this.texturePanelPlugin = undefined;
+        this.textureImageInfo = undefined;
         
         this._browserDetect = undefined;
         this.detectUserAgent();
     };
 
+    getCurrentTextureImageInfo = function () {
+        return this.textureImageInfo;
+    };
+
+    setCurrentTextureImageInfo = function (otherTextureImageInfo) {
+        this.textureImageInfo = otherTextureImageInfo;
+    };
+    
     detectUserAgent = function () {
         console.log('BEG detectUserAgent1');
         
@@ -121,7 +130,15 @@ class Layer {
         // Get the image blobUrl from memory, or from webserver
         // let selectedImageFilename = 'https://cdn.jsdelivr.net/gh/avnermosh/example10_flipTextureOfSprite/landscapeOrientation.jpg';
         // let selectedImageFilename = 'https://cdn.jsdelivr.net/gh/avnermosh/example12_ipad_landscape_image_not_centered_properly/foo1_3840_2160.jpg';
-        let selectedImageFilename = 'https://cdn.jsdelivr.net/gh/avnermosh/example12_ipad_landscape_image_not_centered_properly/exampleImg_3840_2160.jpg';
+        // let selectedImageFilename = 'https://cdn.jsdelivr.net/gh/avnermosh/example12_ipad_landscape_image_not_centered_properly/exampleImg_3840_2160_2.jpg';
+        // let selectedImageFilename = 'https://192.168.1.74/avner/img/7/7/exampleImg_3840_2160.jpg';
+
+        // ok loads (see setup1 in notes)
+        // let selectedImageFilename = 'http://localhost/avner/img/9/13/bar1_2048_1536.jpg';
+        // let selectedImageFilename = 'http://localhost/avner/img/7/7/exampleImg_3840_2160.jpg';
+        let selectedImageFilename = 'http://192.168.1.74/avner/img/7/7/exampleImg_3840_2160.jpg';
+        
+        
         let blobUrl = await this.getImageBlobUrl(selectedImageFilename);
 
         let imageOrientation = 6;
@@ -194,10 +211,13 @@ class Layer {
                     imageOrientation: imageOrientation
                 };
 
+                selectedLayer.textureImageInfo = textureImageInfo;
+                
                 // the texture image finished openning from file. Load the texture image onto the pane
                 let texturePanelPlugin = selectedLayer.getTexturePanelPlugin();
                 texturePanelPlugin.loadTextureImageToTexturePane(textureImageInfo);
-
+                console.log('foo1');
+                
                 resolve(true);
             };
             

@@ -17,7 +17,7 @@ OrbitControlsUtils.getRotationParams = function (imageOrientation) {
 
     let selectedLayer = Model.getSelectedLayer();
     let browserDetect = selectedLayer.getBrowserDetect();
-    // console.log('browserDetect.OS', browserDetect.OS);
+    console.log('browserDetect.11OS', browserDetect.OS);
     // console.log('browserDetect.browser', browserDetect.browser);
     // console.log('browserDetect.version', browserDetect.version);
     
@@ -101,7 +101,7 @@ OrbitControlsUtils.getRotationParams = function (imageOrientation) {
 };
 
 OrbitControlsUtils.getScaleAndRatio = function (width, height, imageOrientation) {
-   // console.log('BEG OrbitControlsUtils.getScaleAndRatio');
+    // console.log('BEG OrbitControlsUtils.getScaleAndRatio');
     
     let scaleX = height;
     let scaleY = width;
@@ -203,9 +203,9 @@ OrbitControlsUtils.getScaleAndRatio = function (width, height, imageOrientation)
 
 
 OrbitControlsUtils.calcCanvasParams = function (guiWindowWidth,
-                                                    guiWindowHeight,
-                                                    imageWidth,
-                                                    imageHeight) {
+                                                guiWindowHeight,
+                                                imageWidth,
+                                                imageHeight) {
     console.log('BEG calcCanvasParams');
 
     // canvasWidth, canvasHeight - the canvas size that preserves the aspectRatio of the image.
@@ -230,6 +230,7 @@ OrbitControlsUtils.calcCanvasParams = function (guiWindowWidth,
         canvasHeight = canvasWidth / image_w_h_ratio;
         
         canvasOffsetTop = (canvasHeight - guiWindowHeight) / 2;
+
         // canvasOffsetTop = (canvasHeight - guiWindowHeight) / 2.5;
         viewportExtendsOnX = false;
     }
