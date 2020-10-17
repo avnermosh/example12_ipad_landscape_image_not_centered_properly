@@ -15,28 +15,16 @@ import { Model } from "./example12_Model.js";
 import { TexturePanelPlugin } from "./example12_TexturePanelPlugin.js";
 import { Util } from "./example12_Util.js";
 import { BrowserDetect } from "./example12_browser_detect.js";
-import { ErrorHandlingUtil } from "./example12_ErrorHandlingUtil.js";
 import { OrbitControlsUtils } from "./example12_OrbitControlsUtils.js";
 
 class Layer {
-    constructor(name){
-        this.name = name;
-
+    constructor(){
         this.texturePanelPlugin = undefined;
         this.textureImageInfo = undefined;
-        
         this._browserDetect = undefined;
         this.detectUserAgent();
     };
 
-    getCurrentTextureImageInfo = function () {
-        return this.textureImageInfo;
-    };
-
-    setCurrentTextureImageInfo = function (otherTextureImageInfo) {
-        this.textureImageInfo = otherTextureImageInfo;
-    };
-    
     detectUserAgent = function () {
         console.log('BEG detectUserAgent1');
         
@@ -47,15 +35,13 @@ class Layer {
         console.log('this._browserDetect.browser', this._browserDetect.browser);
         console.log('this._browserDetect.version', this._browserDetect.version);
 
-        // raise a toast to show the browser type
         let titleStr = "BrowserDetect";
         let msgStr = navigator.userAgent + ', OS: ' +
             this._browserDetect.OS + ", Browser: " +
             this._browserDetect.browser + ", Version: " +
             this._browserDetect.version;
-        toastr.success(msgStr, titleStr, ErrorHandlingUtil.toastrSettings);
+        toastr.success(msgStr, titleStr, Util.toastrSettings);
     };
-    
 
     initLayer = function () {
         console.log('BEG initLayer'); 
@@ -68,21 +54,21 @@ class Layer {
         return this._browserDetect;
     };
 
-    getTexturePanelPlugin = function () {
-        return this.texturePanelPlugin;
-    };
-
     // Returns blobUrl for image specified with imageFilename.
     getImageBlobUrl = async function (imageFilename) {
         // tbd = point to jsdelivr
         // e.g. https://localhost/avner/img/45/56/image_0.jpg
 
+        console.log('foo1'); 
         // let url = 'https://cdn.jsdelivr.net/gh/avnermosh/example10_flipTextureOfSprite/landscapeOrientation.jpg';
         let url = imageFilename;
         console.log('url', url); 
         
         let response = await fetch(url);
-        ErrorHandlingUtil.handleErrors(response);
+        if (!response.ok) {
+            let msgStr = "Request rejected with status: " + response.status + ", and statusText: " + response.statusText;
+            throw Error(msgStr);
+        }
         
         let blob = await response.blob()
         let blobUrl = URL.createObjectURL(blob);
@@ -124,8 +110,7 @@ class Layer {
             }
 
             async function onLoad_Texture( texture2 ) {
-                console.log('BEG onLoad_Texture1');
-                // This anonymous function will be called when the texture2 has finished loading
+                console.log('BEG onLoad_Texture');
                 
                 texture2.wrapS = THREE_ClampToEdgeWrapping;
                 texture2.wrapT = THREE_ClampToEdgeWrapping;
@@ -141,7 +126,6 @@ class Layer {
                 let rotationVal = rotationParams.rotationVal;
                 texture2.flipY = rotationParams.flipY;
                 
-                // https://stackoverflow.com/questions/36668836/threejs-displaying-a-2d-image
                 var material2 = new THREE_SpriteMaterial( { map: texture2,
                                                             color: 0xffffff,
                                                             rotation: rotationVal,
@@ -166,7 +150,7 @@ class Layer {
                 selectedLayer.textureImageInfo = textureImageInfo;
                 
                 // the texture image finished openning from file. Load the texture image onto the pane
-                let texturePanelPlugin = selectedLayer.getTexturePanelPlugin();
+                let texturePanelPlugin = selectedLayer.texturePanelPlugin;
                 texturePanelPlugin.loadTextureImageToTexturePane(textureImageInfo);
                 
                 resolve(true);

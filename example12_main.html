@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-	<!-- <meta charset="utf-8">
-	     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"> -->
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
@@ -12,23 +10,24 @@
                                                             img-src 'self' blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' *;
                                                             style-src  'self' 'unsafe-inline' *">
 
-        <!-- img-src * 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; -->
-        
 	<title>example12</title>
-        <script src="/static/nanobar/0.2.1/js/nanobar.min.js"></script>
         <script src="/static/jquery-2.2.0.min.js"></script>
         <script src="/static/toastr/2.1.4/toastr.min.js"></script>
-        <script src="/static/bootstrap/bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
-        <script src="/static/quilljs/1.3.7/quill.min.js"></script>
-        <script src="/V1/node_modules/exifreader/dist/exif-reader.js"></script>
+        <!-- <script src="/V1/node_modules/exifreader/dist/exif-reader.js"></script> -->
         <link rel="stylesheet" href="/V1/css/style.css">
     </head>
     <body>
         <div id="grid-container1">
         </div>
-        <!-- <script type="module" src="V1/js/examples/example12/example12_main.js"></script> -->
-        <script type="module" src="example12_main.js"></script>
 
+
+        <!-- ############################ -->
+        <!-- for Linux/Android -->
+        <!-- ############################ -->
+        
+        <!-- <script type="module" src="/V1/js/examples/example12/example12_main.js"></script>
+           -->
+        
         <!-- ############################ -->
         <!-- transpile for safari -->
         <!-- ############################ -->
@@ -36,18 +35,9 @@
         <script src="https://unpkg.com/regenerator-runtime@0.13.1/runtime.js"></script>
         <script src="/V1/build/example12/bundle.js"></script>
         
-
-        
-        <link rel="preload" href="/static/bootstrap/bootstrap-4.4.1-dist/css/bootstrap.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <link rel="preload" href="/static/quilljs/1.3.7/quill.snow.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <!-- <link rel="preload" href="/static/bootstrap/bootstrap-4.4.1-dist/css/bootstrap.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"> -->
+        <!-- <link rel="preload" href="/static/quilljs/1.3.7/quill.snow.css" as="style" onload="this.onload=null;this.rel='stylesheet'"> -->
         <link rel="preload" href="/static/toastr/2.1.4/toastr.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        
-	<!-- <script src="../include/three.js"></script>
-
-	     <script src="example4_OrbitControls.js"></script>
-             
-	     <script src="../include/CSS2DRenderer.js"></script>
-           -->
     </body>
 </html>
 

@@ -83,7 +83,7 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
             this.zoomChanged = false;
 
             let selectedLayer = Model.getSelectedLayer();
-            let texturePlugin = selectedLayer.getTexturePanelPlugin()
+            let texturePlugin = selectedLayer.texturePanelPlugin;
             let bBox = texturePlugin.getBoundingBox();
             let viewportExtendsOnX = texturePlugin.doesViewportExtendOnX();
             if(bBox)
@@ -95,10 +95,6 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
         }
 
         return false;
-    };
-    
-    dispose() {
-        this.deactivate();
     };
     
     setCameraFrustumAndZoom(guiWindowWidth,
@@ -215,6 +211,8 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
     limitPanning(bbox, viewportExtendsOnX) {
         console.log('BEG limitPanning'); 
 
+        console.log('viewportExtendsOnX111111111111111111111111111111', viewportExtendsOnX);
+        
         let x1 = 0;
         let x3 = 0;
         if(viewportExtendsOnX)

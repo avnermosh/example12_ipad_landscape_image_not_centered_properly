@@ -102,10 +102,6 @@ class BrowserDetect {
     };
 
 
-    // BrowserDetect.init();
-
-
-    
     ///// mobile
     isMobile1 = function(dataString) {
 
