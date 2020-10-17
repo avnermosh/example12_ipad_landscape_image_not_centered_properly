@@ -4,7 +4,7 @@ import { Layer } from "./example12_Layer.js";
 
 class Model {
 
-    static createLayer = function (layerName) {
+    static createLayer = function () {
         console.log('BEG createLayer');
 
         this._$texturePaneWrapper = $('<div id="texture-pane-wrapper"></div>');
@@ -13,7 +13,7 @@ class Model {
         this._$texturePaneWrapper.appendTo('#grid-container1');
         this._$texturePaneWrapper.append(this.texCanvasWrapper);
 
-        let layer = new Layer(layerName);
+        let layer = new Layer();
         layer.initLayer();
         return layer;
     };
