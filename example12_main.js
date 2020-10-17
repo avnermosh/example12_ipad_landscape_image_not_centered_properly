@@ -14,7 +14,8 @@ import {Vector3 as THREE_Vector3,
         RGBFormat as THREE_RGBFormat,
         ClampToEdgeWrapping as THREE_ClampToEdgeWrapping,
         LinearFilter as THREE_LinearFilter
-       } from '../../include/three.js/three.js-r120/build/three.module.js';
+       // } from '../../include/three.js/three.js-r120/build/three.module.js';
+       } from 'https://cdn.jsdelivr.net/npm/three@0.120/build/three.module.js';
 
 'use strict';
 
@@ -90,10 +91,6 @@ class Layer {
 
     // Returns blobUrl for image specified with imageFilename.
     getImageBlobUrl = async function (imageFilename) {
-        // tbd = point to jsdelivr
-        // e.g. https://localhost/avner/img/45/56/image_0.jpg
-
-        // let url = 'https://cdn.jsdelivr.net/gh/avnermosh/example10_flipTextureOfSprite/landscapeOrientation.jpg';
         let url = imageFilename;
         console.log('url', url); 
         
@@ -116,7 +113,9 @@ class Layer {
         // ok loads (see setup1 in notes)
         // let selectedImageFilename = 'http://localhost/avner/img/9/13/bar1_2048_1536.jpg';
         // let selectedImageFilename = 'http://localhost/avner/img/7/7/exampleImg_3840_2160.jpg';
-        let selectedImageFilename = 'http://192.168.1.74/avner/img/7/7/exampleImg_3840_2160.jpg';
+        // let selectedImageFilename = 'http://192.168.1.74/avner/img/7/7/exampleImg_3840_2160.jpg';
+        let selectedImageFilename = 'https://cdn.jsdelivr.net/gh/avnermosh/example12_ipad_landscape_image_not_centered_properly/exampleImg_3840_2160.jpg';
+        console.log('selectedImageFilename', selectedImageFilename); 
         
         let blobUrl = await this.getImageBlobUrl(selectedImageFilename);
         let imageOrientation = 6;

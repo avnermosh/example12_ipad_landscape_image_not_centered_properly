@@ -11,9 +11,15 @@
                                                             style-src  'self' 'unsafe-inline' *">
 
 	<title>example12</title>
-        <script src="/static/jquery-2.2.0.min.js"></script>
-        <script src="/static/toastr/2.1.4/toastr.min.js"></script>
-        <link rel="stylesheet" href="/V1/js/examples/example12/example12_style.css">
+
+        <!-- <script src="/static/jquery-2.2.0.min.js"></script>
+             <script src="/static/toastr/2.1.4/toastr.min.js"></script>
+             <link rel="stylesheet" href="/V1/js/examples/example12/example12_style.css"> -->
+        
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/avnermosh/example12_ipad_landscape_image_not_centered_properly@master/example12_style.css">
+        
     </head>
     <body>
         <div id="grid-container1">
@@ -25,16 +31,20 @@
         <!-- ############################ -->
         
         <!-- <script type="module" src="/V1/js/examples/example12/example12_main.js"></script> -->
+        <script type="module" src="https://cdn.jsdelivr.net/gh/avnermosh/example12_ipad_landscape_image_not_centered_properly@master/example12_main.js"></script>
         
         
         <!-- ############################ -->
         <!-- transpile for safari -->
         <!-- ############################ -->
 
-        <script src="https://unpkg.com/regenerator-runtime@0.13.1/runtime.js"></script>
-        <script src="/V1/build/example12/bundle.js"></script>
+        <!-- <script src="https://unpkg.com/regenerator-runtime@0.13.1/runtime.js"></script>
+             <script src="/V1/build/example12/bundle.js"></script> -->
+
+
         
-        <link rel="preload" href="/static/toastr/2.1.4/toastr.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <!-- <link rel="preload" href="/static/toastr/2.1.4/toastr.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"> -->
+        <link rel="preload" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     </body>
 </html>
 
