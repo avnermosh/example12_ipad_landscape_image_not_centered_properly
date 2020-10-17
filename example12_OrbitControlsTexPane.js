@@ -213,18 +213,8 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
 
         console.log('viewportExtendsOnX111111111111111111111111111111', viewportExtendsOnX);
         
-        let x1 = 0;
-        let x3 = 0;
-        if(viewportExtendsOnX)
-        {
-            x1 = this.camera.position.x + (this.camera.left * this.minZoom / this.camera.zoom);
-            x3 = this.camera.position.x + (this.camera.right * this.minZoom / this.camera.zoom);
-        }
-        else
-        {
-            x1 = this.camera.position.x + (this.camera.left / this.camera.zoom);
-            x3 = this.camera.position.x + (this.camera.right / this.camera.zoom);
-        }
+        let x1 = this.camera.position.x + (this.camera.left / this.camera.zoom);
+        let x3 = this.camera.position.x + (this.camera.right / this.camera.zoom);
         let x1a = Math.max(x1, bbox.min.x);
         
         let pos_x = 0;
@@ -236,43 +226,16 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
         }
         else
         {
-            let x2 = 0;
-            if(viewportExtendsOnX)
-            {
-                let pos_x1 = x1a - (this.camera.left * this.minZoom / this.camera.zoom);
-                x2 = pos_x1 + (this.camera.right * this.minZoom / this.camera.zoom);
-                let x2a = Math.min(x2, bbox.max.x);
-                pos_x = x2a - (this.camera.right * this.minZoom / this.camera.zoom);
-            }
-            else
-            {
-                let pos_x1 = x1a - (this.camera.left / this.camera.zoom);
-                x2 = pos_x1 + (this.camera.right / this.camera.zoom);
-                let x2a = Math.min(x2, bbox.max.x);
-                pos_x = x2a - (this.camera.right / this.camera.zoom);
-            }
+            let pos_x1 = x1a - (this.camera.left / this.camera.zoom);
+            let x2 = pos_x1 + (this.camera.right / this.camera.zoom);
+            let x2a = Math.min(x2, bbox.max.x);
+            pos_x = x2a - (this.camera.right / this.camera.zoom);
         }
         
-        // _TEXTURE_2D - x-red - directed right (on the screen), y-green directed up (on the screen), z-blue directed towards the camera
-
-        let y1 = 0;
-        let y1a = 0;
-        let pos_y1 = 0;
-        let y3 = 0;
-        if(viewportExtendsOnX)
-        {
-            y1 = this.camera.position.y + (this.camera.bottom / this.camera.zoom);
-            y1a = Math.max(y1, bbox.min.y);
-            pos_y1 = y1a - (this.camera.bottom / this.camera.zoom);
-            y3 = this.camera.position.y + (this.camera.top / this.camera.zoom);
-        }
-        else
-        {
-            y1 = this.camera.position.y + (this.camera.bottom * this.minZoom / this.camera.zoom);
-            y1a = Math.max(y1, bbox.min.y);
-            pos_y1 = y1a - (this.camera.bottom * this.minZoom / this.camera.zoom);
-            y3 = this.camera.position.y + (this.camera.top * this.minZoom / this.camera.zoom);
-        }
+        let y1 = this.camera.position.y + (this.camera.bottom * this.minZoom / this.camera.zoom);
+        let y1a = Math.max(y1, bbox.min.y);
+        let pos_y1 = y1a - (this.camera.bottom * this.minZoom / this.camera.zoom);
+        let y3 = this.camera.position.y + (this.camera.top * this.minZoom / this.camera.zoom);
 
         let pos_y = 0;
         if((y1 <= bbox.min.y) && (y3 >= bbox.max.y))
@@ -283,20 +246,9 @@ class OrbitControlsTexPane extends THREE_EventDispatcher
         }
         else
         {
-            let y2 = 0;
-            let y2a = 0;
-            if(viewportExtendsOnX)
-            {
-                y2 = pos_y1 + (this.camera.top / this.camera.zoom);
-                y2a = Math.min(y2, bbox.max.y);
-                pos_y = y2a - (this.camera.top / this.camera.zoom);
-            }
-            else
-            {
-                y2 = pos_y1 + (this.camera.top * this.minZoom / this.camera.zoom);
-                y2a = Math.min(y2, bbox.max.y);
-                pos_y = y2a - (this.camera.top * this.minZoom / this.camera.zoom);
-            }
+            let y2 = pos_y1 + (this.camera.top * this.minZoom / this.camera.zoom);
+            let y2a = Math.min(y2, bbox.max.y);
+            pos_y = y2a - (this.camera.top * this.minZoom / this.camera.zoom);
         }
         
         // Limit the panning
