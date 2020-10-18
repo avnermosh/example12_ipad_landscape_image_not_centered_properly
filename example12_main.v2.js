@@ -25,9 +25,8 @@ import {Vector3 as THREE_Vector3,
 //////////////////////////////////////////////////////////////
 
 class Model {
-
     static createLayer = function () {
-        console.log('BEG createLayer');
+        console.log('BEG createLayer222');
 
         this._$texturePaneWrapper = $('<div id="texture-pane-wrapper"></div>');
         this.texCanvasWrapper = $('<div id="texCanvasWrapper"></div>');

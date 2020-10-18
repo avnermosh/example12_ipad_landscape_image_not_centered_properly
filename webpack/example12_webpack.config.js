@@ -10,7 +10,7 @@ module.exports = {
     output: {
         // the output file bundle.js is placed in the path "build/mlj/"
         // path: path.resolve('build/mlj'),
-        path: path.resolve('build/example12'),
+        path: path.resolve('js/examples/example12/build'),
         publicPath: 'build',
         filename: 'bundle.js'
     },
@@ -23,6 +23,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 loader: 'babel-loader',
+                exclude: /\.three\.module\.js$/,
                 options: {
                     presets: ["@babel/preset-env"]
                 }                
