@@ -14,8 +14,7 @@ import {Vector3 as THREE_Vector3,
         RGBFormat as THREE_RGBFormat,
         ClampToEdgeWrapping as THREE_ClampToEdgeWrapping,
         LinearFilter as THREE_LinearFilter
-       // } from '../../include/three.js/three.js-r120/build/three.module.js';
-       } from 'https://cdn.jsdelivr.net/npm/three@0.120/build/three.module.js';
+       } from '../../include/three.js/three.js-r120/build/three.module.js';
 
 'use strict';
 
@@ -26,7 +25,7 @@ import {Vector3 as THREE_Vector3,
 
 class Model {
     static createLayer = function () {
-        console.log('BEG createLayer222');
+        console.log('BEG createLayer4');
 
         this._$texturePaneWrapper = $('<div id="texture-pane-wrapper"></div>');
         this.texCanvasWrapper = $('<div id="texCanvasWrapper"></div>');
