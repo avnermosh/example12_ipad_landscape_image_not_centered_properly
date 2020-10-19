@@ -14,7 +14,9 @@ import {Vector3 as THREE_Vector3,
         RGBFormat as THREE_RGBFormat,
         ClampToEdgeWrapping as THREE_ClampToEdgeWrapping,
         LinearFilter as THREE_LinearFilter
-       } from 'https://cdn.jsdelivr.net/npm/three@0.120/build/three.module.js';
+       } from 'threeModuleJs';
+        
+       // } from 'https://cdn.jsdelivr.net/npm/three@0.120/build/three.module.js';
 
 'use strict';
 

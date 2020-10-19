@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <!-- ############################ -->
+        <!-- using jsdelivr, with transpile -->
+        <!-- NOT OK - image is shifted -->
+        <!-- ############################ -->
+        
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
@@ -10,7 +15,7 @@
                                                             img-src 'self' blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' *;
                                                             style-src  'self' 'unsafe-inline' *">
 
-	<title>example12</title>
+	<title>With transpile landscape image shifted</title>
 
         <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.0/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
@@ -18,18 +23,11 @@
         
     </head>
     <body>
-        <div id="grid-container1">
-        </div>
-
-
-        <!-- ############################ -->
-        <!-- using jsdelivr, with transpile -->
-        <!-- ############################ -->
+        <div id="grid-container1"></div>
 
         <script src="https://unpkg.com/regenerator-runtime@0.13.1/runtime.js"></script>
         <script type="module" src="https://cdn.jsdelivr.net/gh/avnermosh/example12_ipad_landscape_image_not_centered_properly@master/build/bundle.js"></script>
 
-        
         <link rel="preload" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     </body>
 </html>
