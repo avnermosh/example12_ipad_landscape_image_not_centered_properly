@@ -9,7 +9,7 @@ module.exports = {
         // the path for the output file bundle.js
         path: path.resolve('js/examples/example12/build'),
         publicPath: 'build',
-        filename: 'bundle.js'
+        filename: 'bundle2.js'
     },
     devServer: {
         contentBase: 'public'
