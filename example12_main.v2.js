@@ -15,8 +15,6 @@ import {Vector3 as THREE_Vector3,
         ClampToEdgeWrapping as THREE_ClampToEdgeWrapping,
         LinearFilter as THREE_LinearFilter
        } from './three.js-r120/build/three.module.js';
-        
-       // } from 'https://cdn.jsdelivr.net/npm/three@0.120/build/three.module.js';
 
 'use strict';
 
